@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Build your AI character for The Roual Hause — eight questions, a master avatar prompt, and your face generated free, right in the page.">
+<meta name="description" content="Build your AI character for The Roual Hause — eight questions, a master avatar prompt, and free generators to bring your character to life.">
 <meta name="theme-color" content="#17120F">
 <meta property="og:title" content="Roual Hause AI Creator">
 <meta property="og:description" content="Eight questions. One character. Free, no account needed.">
@@ -279,39 +279,6 @@
   .saved i{width:5px;height:5px;border-radius:50%;background:var(--ok);display:block}
 
 
-  /* ---------- studio (v2 live generation) ---------- */
-  .studio{border:1px solid var(--line);border-radius:4px;background:var(--ink-2);overflow:hidden}
-  .studio-top{padding:18px 20px;border-bottom:1px solid var(--line-2);
-    display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
-  .studio-top h3{font-family:var(--f-display);font-weight:500;font-size:23px;margin:0;letter-spacing:-.01em}
-  .studio-top p{margin:3px 0 0;font-size:12.5px;color:var(--smoke);flex-basis:100%;order:3}
-  .shots{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line-2)}
-  .shot{position:relative;background:var(--ink);aspect-ratio:3/4;overflow:hidden;
-    display:flex;align-items:center;justify-content:center}
-  .shot img{width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity .5s ease}
-  .shot img.in{opacity:1}
-  .shot .state{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;
-    justify-content:center;gap:10px;color:var(--smoke);font-family:var(--f-mono);
-    font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;text-align:center;padding:16px}
-  .shot .state.gone{display:none}
-  .spinner{width:22px;height:22px;border:1.5px solid var(--line);border-top-color:var(--brass);
-    border-radius:50%;animation:spin 1s linear infinite}
-  @keyframes spin{to{transform:rotate(360deg)}}
-  .shot .pick{position:absolute;left:10px;right:10px;bottom:10px;opacity:0;transition:opacity .2s ease;
-    font-family:var(--f-ui);font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
-    background:rgba(23,18,15,.86);border:1px solid var(--brass);color:var(--brass);
-    padding:10px;border-radius:2px;cursor:pointer;backdrop-filter:blur(4px)}
-  .shot:hover .pick,.shot.ready .pick{opacity:1}
-  .shot.chosen{box-shadow:inset 0 0 0 2px var(--brass)}
-  .shot.chosen .pick{background:var(--brass);color:var(--ink);border-color:var(--brass)}
-  .studio-foot{padding:16px 20px;border-top:1px solid var(--line-2);display:flex;gap:12px;
-    align-items:center;flex-wrap:wrap}
-  .seedtag{font-family:var(--f-mono);font-size:11px;color:var(--smoke);letter-spacing:.1em}
-  .seedtag b{color:var(--brass);font-weight:500}
-  .studio-note{font-size:12.5px;color:var(--smoke);flex-basis:100%;line-height:1.5}
-  .studio-note b{color:var(--bone);font-weight:600}
-  @media (max-width:560px){ .shots{grid-template-columns:1fr} }
-
   @media (prefers-reduced-motion:reduce){
     *{animation-duration:.001ms !important;transition-duration:.001ms !important}
   }
@@ -339,7 +306,7 @@
     <h1>Roual&nbsp;Hause<br><em>AI Creator</em></h1>
     <p class="kicker">Every Hause member walks out with a face.</p>
     <p class="lede">Answer eight questions about the character who is going to front your content &mdash; the one who shows up on camera so you don't have to. You'll walk out with a <b>master avatar prompt</b>, a <b>character lock</b> that keeps their face identical in every future image, a <b>motion prompt</b> for animating them, and a <b>voice guide</b> so their captions sound like them.</p>
-    <p class="lede" style="margin-bottom:30px">Then this page <b>generates your character right here</b> &mdash; free, no account, no waiting on anybody. Lock the face you love and bring them back to the Hause.</p>
+    <p class="lede" style="margin-bottom:30px">Then take your prompt to any free generator we link &mdash; no paid account, no waiting on anybody. Pick the face you love and bring them back to the Hause.</p>
     <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
       <button class="btn" id="enter">Enter the Hause</button>
       <button class="btn ghost" id="resume" style="display:none">Resume last character</button>
@@ -766,31 +733,6 @@
            '</div>';
     });
 
-    h += '<h2 class="sec">Make her, right here</h2>' +
-      '<div class="studio">' +
-        '<div class="studio-top">' +
-          '<div><h3>' + esc(B.name) + '\u2019s first shoot</h3></div>' +
-          '<button class="btn" id="shoot">Generate 4</button>' +
-          '<p>Free, no account, runs in this page. Tap the one that feels like her to lock her face.</p>' +
-        '</div>' +
-        '<div class="shots" id="shots">' +
-          [0,1,2,3].map(function(i){
-            return '<div class="shot" data-slot="' + i + '">' +
-                     '<div class="state" id="st'+i+'">Empty</div>' +
-                     '<img alt="' + esc(B.name) + ' option ' + (i+1) + '" id="im'+i+'">' +
-                     '<button class="pick" data-pick="'+i+'" hidden>Lock this face</button>' +
-                   '</div>';
-          }).join('') +
-        '</div>' +
-        '<div class="studio-foot">' +
-          '<span class="seedtag" id="seedtag">No face locked yet</span>' +
-          '<button class="btn ghost" id="shootmore" hidden>Try 4 more</button>' +
-          '<p class="studio-note">These come out good, not perfect \u2014 they\u2019re free. ' +
-          'For your very best face, take <b>prompt 01</b> to Google Gemini below. ' +
-          'Either way, <b>lock a face here first</b> so every future image matches.</p>' +
-        '</div>' +
-      '</div>';
-
     h += '<h2 class="sec">Content pillars</h2><dl class="pillars">';
     pillars(B.lane).forEach(function(p){
       h += '<div class="pillar"><dt>' + esc(p.k) + '</dt><dd><b>' + esc(p.t) + '.</b> ' + esc(p.d) + '</dd></div>';
@@ -827,76 +769,6 @@
     var t = ticks.children;
     for(var i=0;i<t.length;i++) t[i].className = "tick on";
     window.scrollTo({top:0,behavior:"smooth"});
-
-    /* ---- live generation ---- */
-    var dims = (A.orient && A.orient.w) ? A.orient : {w:880,h:1100};
-    var lockedSeed = null;
-
-    function imgURL(seed){
-      return "https://image.pollinations.ai/prompt/" + encodeURIComponent(B.master) +
-             "?width=" + dims.w + "&height=" + dims.h +
-             "&seed=" + seed + "&model=flux&nologo=true";
-    }
-
-    function shoot(){
-      var base = Math.floor(Math.random() * 900000) + 1000;
-      $("shootmore").hidden = false;
-      [0,1,2,3].forEach(function(i){
-        var slot = result.querySelector('[data-slot="' + i + '"]');
-        var st = $("st"+i), im = $("im"+i);
-        var pick = result.querySelector('[data-pick="' + i + '"]');
-        var seed = base + i * 137;
-        slot.classList.remove("ready","chosen");
-        pick.hidden = true;
-        im.classList.remove("in");
-        st.classList.remove("gone");
-        st.innerHTML = '<div class="spinner"></div><span>Shooting ' + (i+1) + ' of 4</span>';
-
-        setTimeout(function(){
-          im.onload = function(){
-            st.classList.add("gone");
-            im.classList.add("in");
-            slot.classList.add("ready");
-            pick.hidden = false;
-            slot.dataset.seed = seed;
-          };
-          im.onerror = function(){
-            st.classList.remove("gone");
-            st.innerHTML = '<span>Busy \u2014 tap to retry</span>';
-            st.style.cursor = "pointer";
-            st.onclick = function(){ im.src = imgURL(seed + 7) + "&r=" + Date.now(); };
-          };
-          im.src = imgURL(seed);
-        }, i * 1600);
-      });
-    }
-
-    $("shoot").addEventListener("click", shoot);
-    $("shootmore").addEventListener("click", shoot);
-
-    result.addEventListener("click", function(e){
-      var p = e.target.closest("[data-pick]");
-      if(!p) return;
-      var slot = p.closest(".shot");
-      lockedSeed = slot.dataset.seed;
-      result.querySelectorAll(".shot").forEach(function(s){ s.classList.remove("chosen"); });
-      result.querySelectorAll("[data-pick]").forEach(function(b){ b.textContent = "Lock this face"; });
-      slot.classList.add("chosen");
-      p.textContent = "Locked";
-      $("seedtag").innerHTML = 'Face locked \u00b7 seed <b>' + lockedSeed + '</b> \u00b7 added to prompt 02';
-
-      var lockPre = $("blk1");
-      var addition = "\n\nSEED: " + lockedSeed +
-        "\nIf your generator has a seed field, use this number every time. It is what keeps her face identical.";
-      if(lockPre.textContent.indexOf("SEED:") === -1){
-        lockPre.textContent = lockPre.textContent + addition;
-        blocks[1].body = blocks[1].body + addition;
-      } else {
-        lockPre.textContent = lockPre.textContent.replace(/\n\nSEED: [\s\S]*$/, addition);
-        blocks[1].body = blocks[1].body.replace(/\n\nSEED: [\s\S]*$/, addition);
-      }
-      try{ A.seed = lockedSeed; save(); }catch(err){}
-    });
 
     result.querySelectorAll("[data-copy]").forEach(function(btn){
       btn.addEventListener("click", function(){
